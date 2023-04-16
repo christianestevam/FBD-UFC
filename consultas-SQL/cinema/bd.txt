@@ -45,11 +45,11 @@ SELECT * FROM Sessao;
 SELECT * FROM Poltrona;
 
 4. Tabela Bilhete:
-a) As chaves estrangeiras da tabela Bilhete são id_poltrona (referenciando a tabela Poltrona) e cod_sessao (referenciando a tabela Sessao).
+a. As chaves estrangeiras da tabela Bilhete são id_poltrona (referenciando a tabela Poltrona) e cod_sessao (referenciando a tabela Sessao).
 
-b) As chaves candidatas são (cod_sessao, id_poltrona, cod_bilhete) e (id_poltrona, cod_sessao, cod_bilhete). Escolhemos a primeira como chave primária.
+b. As chaves candidatas são (cod_sessao, id_poltrona, cod_bilhete) e (id_poltrona, cod_sessao, cod_bilhete). Escolhemos a primeira como chave primária.
 
-c) Comando para criar a tabela Bilhete especificando as chaves primárias, estrangeiras e únicas:
+c. Comando para criar a tabela Bilhete especificando as chaves primárias, estrangeiras e únicas:
 
 CREATE TABLE Bilhete (
     cod_sessao INTEGER NOT NULL,
@@ -59,3 +59,33 @@ CREATE TABLE Bilhete (
     FOREIGN KEY (cod_sessao) REFERENCES Sessao (codigo),
     FOREIGN KEY (id_poltrona) REFERENCES Poltrona (idp)
 );
+
+5.
+
+a. Para permitir que um filme tenha vários gêneros, é preciso criar uma nova tabela que relacione o filme com seus gêneros. Essa tabela terá uma chave estrangeira
+que referencia a tabela Filme e outra chave estrangeira que referencia a tabela Gênero.
+
+b.O esquema da tabela ficaria da seguinte forma:
+CREATE TABLE Filme_Genero (
+  codigo_filme INTEGER,
+  codigo_genero INTEGER,
+  PRIMARY KEY (codigo_filme, codigo_genero),
+  FOREIGN KEY (codigo_filme) REFERENCES Filme(codigo),
+  FOREIGN KEY (codigo_genero) REFERENCES Genero(codigo)
+);
+
+c. INSERT INTO Filme_Genero (codigo_filme, codigo_genero) VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(2, 4),
+(3, 2);
+
+ 
+6. Quando executado o comando DELETE FROM FILME WHERE codigo=X para um valor de código existente no qual há uma sessão alocada, o banco de dados retorna um erro. Isso
+acontece porque a tabela Sessao tem uma chave estrangeira que referencia a tabela Filme, ou seja, a exclusão de um filme com sessões alocadas violaria a integridade
+referencial.
+
+7. Ao executar o comando UPDATE POLTRONA SET id_poltrona=Y WHERE id_poltrona=X em um valor de código existente no qual há um bilhete vendido, o banco de dados retorna 
+um erro. Isso acontece porque a tabela Bilhete tem uma chave estrangeira que referencia a tabela Poltrona, ou seja, a atualização de uma poltrona com um bilhete vendido
+violaria a integridade referencial. É necessário primeiro excluir o bilhete referente à poltrona antes de atualizar seu valor.

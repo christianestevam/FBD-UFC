@@ -1,0 +1,5 @@
+ALTER TABLE Poltrona
+ADD COLUMN idp INTEGER;
+
+ALTER TABLE Poltrona
+ADD CONSTRAINT unk_idp UNIQUE (idp);

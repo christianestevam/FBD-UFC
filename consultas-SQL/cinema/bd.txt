@@ -1,0 +1,61 @@
+fbd2.txt
+
+1. Comando para alterar a tabela Poltrona inserindo uma coluna extra e uma chave única:
+
+ALTER TABLE Poltrona
+ADD COLUMN idp INTEGER;
+
+ALTER TABLE Poltrona
+ADD CONSTRAINT unk_idp UNIQUE (idp);
+
+2. Inserção de 5 tuplas em cada tabela, respeitando as restrições:
+
+INSERT INTO Filme (codigo, titulo, duracao, classificacao, diretor, ano_lancamento)
+VALUES 
+    (1, 'Matrix', '2h 16min', '14 anos', 'Lana Wachowski, Lilly Wachowski', 1999),
+    (2, 'Interestelar', '2h 49min', '12 anos', 'Christopher Nolan', 2014),
+    (3, 'Os Vingadores', '2h 23min', '12 anos', 'Joss Whedon', 2012),
+    (4, 'Toy Story', '1h 21min', 'Livre', 'John Lasseter', 1995),
+    (5, 'Jurassic Park', '2h 7min', '12 anos', 'Steven Spielberg', 1993);
+
+Tabela Sessao:
+
+INSERT INTO Sessao (codigo, horario_inicio, data, codigo_filme)
+VALUES 
+    (1, '14:00', '2023-04-17', 1),
+    (2, '16:30', '2023-04-17', 2),
+    (3, '19:00', '2023-04-17', 3),
+    (4, '14:00', '2023-04-18', 4),
+    (5, '16:00', '2023-04-18', 5);
+
+Tabela Poltrona:
+
+INSERT INTO Poltrona (numero, tipo, sala)
+VALUES 
+    (1, 'Comum', 'Sala 1'),
+    (2, 'VIP', 'Sala 1'),
+    (3, 'Comum', 'Sala 2'),
+    (4, 'VIP', 'Sala 2'),
+    (5, 'Comum', 'Sala 3');
+
+Comando SELECT * FROM NOME_TABELA para visualizar os dados inseridos em cada tabela:
+
+SELECT * FROM Filme;
+SELECT * FROM Sessao;
+SELECT * FROM Poltrona;
+
+4. Tabela Bilhete:
+a) As chaves estrangeiras da tabela Bilhete são id_poltrona (referenciando a tabela Poltrona) e cod_sessao (referenciando a tabela Sessao).
+
+b) As chaves candidatas são (cod_sessao, id_poltrona, cod_bilhete) e (id_poltrona, cod_sessao, cod_bilhete). Escolhemos a primeira como chave primária.
+
+c) Comando para criar a tabela Bilhete especificando as chaves primárias, estrangeiras e únicas:
+
+CREATE TABLE Bilhete (
+    cod_sessao INTEGER NOT NULL,
+    id_poltrona INTEGER NOT NULL,
+    cod_bilhete INTEGER NOT NULL,
+    PRIMARY KEY (cod_sessao, id_poltrona, cod_bilhete),
+    FOREIGN KEY (cod_sessao) REFERENCES Sessao (codigo),
+    FOREIGN KEY (id_poltrona) REFERENCES Poltrona (idp)
+);
